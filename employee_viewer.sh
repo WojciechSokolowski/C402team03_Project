@@ -27,7 +27,63 @@ add_employee(){
 	#mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
 	echo "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
 	read -n 1 -s -r -p "Press any key to exit..."
-}	
+}
+
+edit_employee(){
+
+	read -p "Enter the employee ID to edit: " employee_id
+
+	    #employee=$(mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -se "SELECT first_name, last_name, date_of_birth, email, mobile, location_id FROM employee WHERE employee_id='$employee_id';")
+	if [ -z "$employee" ]; then
+		message="No employee found with ID $employee_id"
+		return
+	fi
+	    
+	IFS=$'\t' read -r current_first_name current_last_name current_dob current_email current_mobile current_location_id <<< "$employee"
+
+	    IFS=$'\t' read -r current_first_name current_last_name current_dob current_email current_mobile current_location_id <<< "$employee"
+
+
+	echo "Press enter to NOT edit each data"
+    	read -p "First Name [$current_first_name]: " first_name
+    	if [ -z "$first_name" ]; then
+        	first_name="$current_first_name"
+    	fi
+
+    	read -p "Last Name [$current_last_name]: " last_name
+    	if [ -z "$last_name" ]; then
+        	last_name="$current_last_name"
+    	fi
+
+    	read -p "Date of Birth [$current_dob] (YYYY-MM-DD): " date_of_birth
+    	if [ -z "$date_of_birth" ]; then
+        	date_of_birth="$current_dob"
+    	fi
+
+    	read -p "Email [$current_email]: " email
+    	if [ -z "$email" ]; then
+        	email="$current_email"
+    	fi
+
+    	read -p "Mobile [$current_mobile]: " mobile
+    	if [ -z "$mobile" ]; then
+        	mobile="$current_mobile"
+    	fi
+
+    	read -p "Location ID [$current_location_id]: " location_id
+    	if [ -z "$location_id" ]; then
+        	location_id="$current_location_id"
+    	fi
+
+    	mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "UPDATE employee SET first_name='$first_name', last_name='$last_name', date_of_birth='$date_of_birth', email='$email', mobile='$mobile', location_id='$location_id' WHERE employee_id='$employee_id';"
+
+    	echo "Employee details updated successfully."
+
+	read -n 1 -s -r -p "Press any key to exit..."
+
+}
+
+
 
 show_menu() {
 	clear
@@ -74,7 +130,7 @@ while true; do
 		2)
 			add_employee;;
 		3)
-			message="update dummy";;
+			edit_employee;;
 		4)
 			message="delete dummy";;
 		5)
