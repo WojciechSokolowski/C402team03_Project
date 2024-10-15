@@ -10,19 +10,22 @@ message=""
 display_employees(){
 	echo "Employee list"
 	#TO DO MAKE IT WORK WITH DB IN QUESTION
-	#mysql -u "$DB_USER" -p "$DB_PASS" -D "$DB_NAME" -e "SELECT id,name FROM employees;" 
-	read -n 1 -s -r -p "Press any key to exit..."
+	#mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "SELECT employee_id AS 'ID', CONCAT(first_name, ' ', last_name) AS 'Name' FROM employee;" | column -t -s $'\t'
+    
+    	echo ""
+    	read -n 1 -s -r -p "Press any key to continue..."
 
 }
 add_employee(){
 	echo "Creating new employee"
-	read -p "Enter employee Name: " name
-	read -p "Enter Employee position: " position
-	read -p "Enter Employee Department: " department
-	read -p "Enter Employee Salary: " salary
-
-	    #mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employees (name, position, department, salary) VALUES ('$name', '$position', '$department', '$salary');"
-	echo "INSERT INTO employees (name, position, department, salary) VALUES ('$name', '$position', '$department', '$salary');"
+    	read -p "Enter first name: " first_name
+    	read -p "Enter last name: " last_name
+    	read -p "Enter date of birth (YYYY-MM-DD): " date_of_birth
+    	read -p "Enter email: " email
+   	read -p "Enter mobile number: " mobile
+    	read -p "Enter location ID: " location_id
+	#mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
+	echo "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
 	read -n 1 -s -r -p "Press any key to exit..."
 }	
 
@@ -49,7 +52,7 @@ show_menu() {
 	echo "2. Add a new eployee"
 	echo "3. Edit employee"
 	echo "4. Remove employee"
-	echo "6. Exit"
+	echo "5. Exit"
 	echo
 	echo
 	echo "$message"
