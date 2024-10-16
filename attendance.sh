@@ -21,16 +21,20 @@ if [[ "$employee_exists" -eq 1 ]]; then
         # Employee hasn't checked in yet, record check-in time
         	checkin_date=$(date +"%Y-%m-%d")
 		checkin_time=$(date +"%H:%M:%S")
-        	place=""
+        	#read -p "Please enter check-in date (YYYY-MM-DD): " checkin_date
+        	#read -p "Please enter check-in time (HH:MM:SS): " checkin_time
+	 	place=""
 
 		read -p "Please enter place (o - office, ho - home office, cu - customer site): " place
 	        	
 		mysql -h $DB_HOST -u $DB_USER -p$DB_PASS -D $DB_NAME -se "INSERT INTO attendance (employee_id, checkin_date, checkin_time, place) VALUES ($employee_id, '$checkin_date', '$checkin_time', '$place');"
-	        echo "Check-in time recorded: $checkin_time $checkin_time at $place "
+	        echo "Check-in time recorded: $checkin_date $checkin_time at $place "
         else
                 # Employee has checked in but not checked out, so record check-out time
 		checkout_time=$(date +"%H:%M:%S")
 		checkout_date=$(date +"%Y-%m-%d")
+  		#read -p "Please enter check-out date (YYYY-MM-DD): " checkout_date
+	        #read -p "Please enter check-out time (HH:MM:SS): " checkout_time
                	mysql -h $DB_HOST -u $DB_USER -p$DB_PASS -D $DB_NAME -se "UPDATE attendance SET checkout_time='$checkout_time' WHERE employee_id=$employee_id AND checkout_time IS NULL;"
                                                                                  
                 # Calculate total hours worked
