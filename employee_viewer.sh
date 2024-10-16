@@ -1,16 +1,18 @@
 #!/bin/bash
 #
-DB_USER="name"
-DB_PASS="pass"
-DB_NAME="name"
-DB_HOST="host"
+read -p "Enter MySQL username: " DB_USER
+read -sp "Enter MySQL password: " DB_PASS
+echo    # To move to a new line after the password input
+DB_NAME="employee_management_system"
+read -p "Enter host (e.g., your-ec2-ip): " DB_HOST
+
 
 message=""
 
 display_employees(){
 	echo "Employee list"
 	#TO DO MAKE IT WORK WITH DB IN QUESTION
-	#mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "SELECT employee_id AS 'ID', CONCAT(first_name, ' ', last_name) AS 'Name' FROM employee;" | column -t -s $'\t'
+	mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "SELECT employee_id AS 'ID', CONCAT(first_name, ' ', last_name) AS 'Name' FROM employee;" | column -t -s $'\t'
     
     	echo ""
     	read -n 1 -s -r -p "Press any key to continue..."
@@ -24,7 +26,7 @@ add_employee(){
     	read -p "Enter email: " email
    	read -p "Enter mobile number: " mobile
     	read -p "Enter location ID: " location_id
-	#mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
+	mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
 	echo "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
 	read -n 1 -s -r -p "Press any key to exit..."
 }
@@ -33,16 +35,13 @@ edit_employee(){
 
 	read -p "Enter the employee ID to edit: " employee_id
 
-	    #employee=$(mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -se "SELECT first_name, last_name, date_of_birth, email, mobile, location_id FROM employee WHERE employee_id='$employee_id';")
+	    employee=$(mysql -h "$DB_HOST"  -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -se "SELECT first_name, last_name, date_of_birth, email, mobile, location_id FROM employee WHERE employee_id='$employee_id';")
 	if [ -z "$employee" ]; then
 		message="No employee found with ID $employee_id"
 		return
 	fi
 	    
 	IFS=$'\t' read -r current_first_name current_last_name current_dob current_email current_mobile current_location_id <<< "$employee"
-
-	    IFS=$'\t' read -r current_first_name current_last_name current_dob current_email current_mobile current_location_id <<< "$employee"
-
 
 	echo "Press enter to NOT edit each data"
     	read -p "First Name [$current_first_name]: " first_name
@@ -75,7 +74,7 @@ edit_employee(){
         	location_id="$current_location_id"
     	fi
 
-    	mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "UPDATE employee SET first_name='$first_name', last_name='$last_name', date_of_birth='$date_of_birth', email='$email', mobile='$mobile', location_id='$location_id' WHERE employee_id='$employee_id';"
+    	mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "UPDATE employee SET first_name='$first_name', last_name='$last_name', date_of_birth='$date_of_birth', email='$email', mobile='$mobile', location_id='$location_id' WHERE employee_id='$employee_id';"
 
     	echo "Employee details updated successfully."
 
@@ -90,7 +89,7 @@ delete_employee(){
     read -p "Are you sure you want to delete employee with ID $employee_id? (y/n): " confirm
 
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
-        #mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "DELETE FROM employee WHERE employee_id='$employee_id';"
+        mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "DELETE FROM employee WHERE employee_id='$employee_id';"
         echo "DELETE FROM employee WHERE employee_id='$employee_id';"
         echo "Employee with ID $employee_id has been deleted."
     else
