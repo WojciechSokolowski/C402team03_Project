@@ -1,17 +1,11 @@
 #!/bin/bash
 #
-read -p "Enter MySQL username: " DB_USER
-read -sp "Enter MySQL password: " DB_PASS
-echo    # To move to a new line after the password input
-DB_NAME="employee_management_system"
-read -p "Enter host (e.g., your-ec2-ip): " DB_HOST
-
 
 message=""
 
 display_employees(){
 	echo "Employee list"
-	mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "SELECT employee_id AS 'ID', CONCAT(first_name, ' ', last_name) AS 'Name' FROM employee;" | column -t -s $'\t'
+	mysql  -D "$DB_NAME" -e "SELECT employee_id AS 'ID', CONCAT(first_name, ' ', last_name) AS 'Name' FROM employee;" | column -t -s $'\t'
     
     	echo ""
     	read -n 1 -s -r -p "Press any key to continue..."
