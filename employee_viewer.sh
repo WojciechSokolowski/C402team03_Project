@@ -11,7 +11,6 @@ message=""
 
 display_employees(){
 	echo "Employee list"
-	#TO DO MAKE IT WORK WITH DB IN QUESTION
 	mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "SELECT employee_id AS 'ID', CONCAT(first_name, ' ', last_name) AS 'Name' FROM employee;" | column -t -s $'\t'
     
     	echo ""
@@ -20,14 +19,44 @@ display_employees(){
 }
 add_employee(){
 	echo "Creating new employee"
-    	read -p "Enter first name: " first_name
-    	read -p "Enter last name: " last_name
-    	read -p "Enter date of birth (YYYY-MM-DD): " date_of_birth
-    	read -p "Enter email: " email
-   	read -p "Enter mobile number: " mobile
-    	read -p "Enter location ID: " location_id
-	mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
-	echo "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
+	read -p "Would you like to enter the data in one line? (yes/no): " response
+	
+	if [[ "$response" == "yes" || "$response" == "y" || "$response" == "Y" ]]; then
+        	read -p "Enter employee details (first_name last_name date_of_birth email mobile location_id): " employee_data
+        	IFS=' ' read -r first_name last_name date_of_birth email mobile location_id <<< "$employee_data"
+
+        	employee_entry="First Name: $first_name, Last Name: $last_name, Date of Birth: $date_of_birth, Email: $email, Mobile: $mobile, Location ID: $location_id"
+        
+       		sorted_entry=$(echo "$employee_entry" | tr ', ' '\n' | sort | tr '\n' ', ' | sed 's/, $//')
+        
+        	echo "You entered the following details:"
+        	echo "First Name: $first_name"
+        	echo "Last Name: $last_name"
+        	echo "Date of Birth: $date_of_birth"
+        	echo "Email: $email"
+	        echo "Mobile: $mobile"
+	        echo "Location ID: $location_id"
+		read -p "Is everything correct? (yes/no): " confirmation
+        
+        	if [[ "$confirmation" == "yes" || "$confirmation" == "y" || "$confirmation" == "Y" ]]; then
+             		mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
+            		echo "Employee added successfully."
+        	else
+            		echo "Employee addition cancelled."
+        	fi
+	
+	else
+	
+	
+		read -p "Enter first name: " first_name
+    		read -p "Enter last name: " last_name
+    		read -p "Enter date of birth (YYYY-MM-DD): " date_of_birth
+    		read -p "Enter email: " email
+   		read -p "Enter mobile number: " mobile
+    		read -p "Enter location ID: " location_id
+		mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
+	
+	fi	
 	read -n 1 -s -r -p "Press any key to exit..."
 }
 
@@ -90,7 +119,6 @@ delete_employee(){
 
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
         mysql -h "$DB_HOST" -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "DELETE FROM employee WHERE employee_id='$employee_id';"
-        echo "DELETE FROM employee WHERE employee_id='$employee_id';"
         echo "Employee with ID $employee_id has been deleted."
     else
         echo "Deletion cancelled."
