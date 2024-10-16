@@ -83,7 +83,22 @@ edit_employee(){
 
 }
 
+delete_employee(){
+    echo "Deleting an employee"
+    read -p "Enter the employee ID to delete: " employee_id
+    # Confirm before deletion
+    read -p "Are you sure you want to delete employee with ID $employee_id? (y/n): " confirm
 
+    if [[ "$confirm" =~ ^[Yy]$ ]]; then
+        #mysql -u "$DB_USER" -p"$DB_PASS" -D "$DB_NAME" -e "DELETE FROM employee WHERE employee_id='$employee_id';"
+        echo "DELETE FROM employee WHERE employee_id='$employee_id';"
+        echo "Employee with ID $employee_id has been deleted."
+    else
+        echo "Deletion cancelled."
+    fi
+
+    read -n 1 -s -r -p "Press any key to exit..."
+}
 
 show_menu() {
 	clear
@@ -116,7 +131,7 @@ show_menu() {
 
 
 ######################################################
-#############PROGRAM##################################
+#########   PROGRAM     ##############################
 ######################################################
 
 
@@ -132,7 +147,7 @@ while true; do
 		3)
 			edit_employee;;
 		4)
-			message="delete dummy";;
+			delete_employee;;
 		5)
 			echo "exciting"
 			break;;
