@@ -5,8 +5,18 @@ message=""
 
 display_employees(){
 	echo "Employee list"
-	mysql  -D "$DB_NAME" -e "SELECT employee_id AS 'ID', CONCAT(first_name, ' ', last_name) AS 'Name' FROM employee;" | column -t -s $'\t'
-    
+        mysql -D "$DB_NAME" -e "
+        SELECT 
+            e.employee_id AS 'ID', 
+            CONCAT(e.first_name, ' ', e.last_name) AS 'Name',
+	    IFNULL(ROUND(AVG(er.overall_score),1), 'N/A') AS 'Average Score'
+        FROM 
+            employee e
+        LEFT JOIN 
+            emp_review er ON e.employee_id = er.employee_id
+        GROUP BY 
+            e.employee_id;
+    " | column -t -s $'\t'
     	echo ""
     	read -n 1 -s -r -p "Press any key to continue..."
 
