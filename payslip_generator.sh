@@ -3,8 +3,7 @@
 
 # Function to generate payroll and payslip
 generate_payroll() {
-    echo "Enter Employee ID:"
-    read emp_id
+    read -p "Enter Employee ID: " emp_id
 
     # Validate that emp_id is a number
     if ! [[ "$emp_id" =~ ^[0-9]+$ ]]; then
@@ -90,3 +89,5 @@ generate_payroll() {
 
 # Run the function
 generate_payroll
+read -n 1 -s -r -p "Press any key to exit..."
+
