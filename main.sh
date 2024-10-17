@@ -78,7 +78,7 @@ display(){
     echo "3) Create New Account"
     echo "4) Check Attendance"
     echo "5) Payslip Generator"
-    echo "6) "
+    echo "6) Review System"
 
     echo "9) Exit"
     echo "--------------------------------"
@@ -116,6 +116,9 @@ while true; do
 			;;
 		5)
 			./payslip_generator.sh 
+			;;
+		6)
+			./review_employee.sh 
 			;;
 		9) break
 			;;
