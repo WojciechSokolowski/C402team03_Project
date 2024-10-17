@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# Database connection details
-DB_NAME="employee_management_system"
-DB_USER="ben2"
-DB_PASSWORD="ben123456"
-
 # Function to view employee details
 view_employee() {
     echo -e "\033[1;34mEnter Employee ID:\033[0m"  # Blue bold text for prompt
@@ -18,7 +13,7 @@ view_employee() {
            WHERE e.employee_id = $emp_id;"
 
     # Execute the query and capture the result
-    result=$(mysql -u"$DB_USER" -p"$DB_PASSWORD" -D "$DB_NAME" -e "$query" -B --silent)
+    result=$(mysql -D "$DB_NAME" -e "$query" -B --silent)
 
     # Check if the result is empty
     if [ -z "$result" ]; then

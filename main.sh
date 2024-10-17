@@ -89,6 +89,8 @@ display(){
 #
 ##
 
+chmod +x *.sh
+
 load_user
 check_user
 
@@ -104,10 +106,13 @@ while true; do
 			./employee_viewer.sh 
 			;;
 		2)
-			./view_employee.sh
+			./viem_employee.sh
 			;;
 		3)
 			./sql_user_creator.sh 
+			;;
+		4)
+			./attendancenew.sh
 			;;
 		9) break
 			;;

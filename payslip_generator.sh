@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Database connection details
-DB_NAME="employee_management_system"
-DB_USER="ben2"
-DB_PASSWORD="ben123456"
 
 # Function to generate payroll and payslip
 generate_payroll() {
@@ -17,7 +13,7 @@ generate_payroll() {
     fi
 
     # Get employee details from the database
-    employee=$(mysql -u"$DB_USER" -p"$DB_PASSWORD" -D "$DB_NAME" -e "
+    employee=$(mysql -D "$DB_NAME" -e "
         SELECT e.first_name, e.last_name, e.email, p.salary
         FROM employee e
         JOIN position p ON e.employee_id = p.employee_id
@@ -33,7 +29,7 @@ generate_payroll() {
     emp_name="$first_name $last_name"
 
     # Count the number of attendance records for the employee
-    attendance_count=$(mysql -u"$DB_USER" -p"$DB_PASSWORD" -D "$DB_NAME" -e "
+    attendance_count=$(mysql -D "$DB_NAME" -e "
         SELECT COUNT(*)
         FROM attendance
         WHERE employee_id = $emp_id;" -B --silent)

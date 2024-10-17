@@ -7,14 +7,9 @@ read -p "Enter First Name: " first_name
 read -p "Enter Last Name: " last_name
 read -p "Enter Email: " email
 
-# Database connection details
-DB_USER="team03"
-DB_PASS="test"
-DB_HOST="16.171.135.52"
-DB_NAME="employee_management_system"
 
 # Check if employee exists in the MySQL database
-employee_exists=$(mysql -h $DB_HOST -u $DB_USER -p$DB_PASS -D $DB_NAME -se "SELECT COUNT(*) FROM employee WHERE employee_id=$employee_id AND first_name='$first_name' AND last_name='$last_name' AND email='$email';")
+employee_exists=$(mysql -D $DB_NAME -se "SELECT COUNT(*) FROM employee WHERE employee_id=$employee_id AND first_name='$first_name' AND last_name='$last_name' AND email='$email';")
 
 if [ "$employee_exists" -eq 1 ]; then
 # Get check-in and check-out times
@@ -27,10 +22,10 @@ if [ "$employee_exists" -eq 1 ]; then
         read -p "Please enter place (o - office, ho - home office, cu - customer site): " place
                                     
 # Insert check-in and check-out information into attendance table
-	mysql -h $DB_HOST -u $DB_USER -p$DB_PASS -D $DB_NAME -e "INSERT INTO attendance (employee_id, checkin_date, checkin_time, checkout_time, place) VALUES ($employee_id, '$checkin_date', '$checkin_time', '$checkout_time', '$place');"
+	mysql -D $DB_NAME -e "INSERT INTO attendance (employee_id, checkin_date, checkin_time, checkout_time, place) VALUES ($employee_id, '$checkin_date', '$checkin_time', '$checkout_time', '$place');"
                                                 
 # Calculate total hours worked
-	hours_worked=$(mysql -h $DB_HOST -u $DB_USER -p$DB_PASS -D $DB_NAME -se "SELECT TIMESTAMPDIFF(HOUR, CONCAT(checkin_date, ' ', checkin_time), CONCAT(checkout_date, ' ', checkout_time)) FROM attendance WHERE employee_id=$employee_id AND checkin_date='$checkin_date';")
+	hours_worked=$(mysql -D $DB_NAME -se "SELECT TIMESTAMPDIFF(HOUR, CONCAT(checkin_date, ' ', checkin_time), CONCAT(checkout_date, ' ', checkout_time)) FROM attendance WHERE employee_id=$employee_id AND checkin_date='$checkin_date';")
 
         echo "Check-in time recorded: $checkin_date $checkin_time at $place"
         echo "Check-out time recorded: $checkout_date $checkout_time"
