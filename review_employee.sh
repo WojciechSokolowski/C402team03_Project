@@ -18,7 +18,7 @@ add_review(){
         read -p "Enter the Reviewers ID: " reviewer_id
         read -p "Enter the Employee ID:" employee_id
         read -p "Enter date of review (YYYY-MM-DD): " review_date
-        read -pr "Enter review text: " review
+        read -rp "Enter review text: " review
         read -p "Enter score (greater than 0.0 and less than 10.0): " overall_score
 
         mysql -D "$DB_NAME" -e "INSERT INTO emp_review (reviewer_id, employee_id, review_date, review, overall_score) VALUES ('$reviewer_id', '$employee_id', '$review_date', '$review', '$overall_score');"
@@ -55,7 +55,7 @@ edit_review(){
                 review_date="$cur_review_date"
         fi
 
-        read -pr "Review text [$cur_review_t]: " review_t
+        read -rp "Review text [$cur_review_t]: " review_t
         if [ -z "$review_t" ]; then
                 review_t=$(mysql -D "$DB_NAME" -se "SELECT review FROM emp_review er WHERE reviewer_id = '$reviewer_id' AND employee_id = '$employee_id' AND review_date = '$review_date';")
         fi
