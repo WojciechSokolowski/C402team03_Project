@@ -138,6 +138,50 @@ edit_employee(){
 
     	echo "Employee details updated successfully."
 
+	read -p "Do you need to edit also position table? (y/n): " second_edit
+
+	if [[ $second_edit == "y" || $second_edit == "Y" || $second_edit == "yes" ]]; then
+		
+		position=$(mysql -D "$DB_NAME" -se "SELECT department_id, name, begin_date, end_date, salary, ho_per_week FROM position WHERE employee_id='$employee_id';")
+
+    		if [ -z "$position" ]; then
+        		echo "No position found for employee ID $employee_id. Please add position details."
+    		else
+        		IFS=$'\t' read -r current_department_id current_position_name current_begin_date current_end_date current_salary current_ho_per_week <<< "$position"
+
+        		echo "Press enter to NOT edit each data for position"
+       			read -p "Department ID [$current_department_id]: " department_id
+        		if [ -z "$department_id" ]; then
+            			department_id="$current_department_id"
+        		fi
+
+        		read -p "Position Name [$current_position_name]: " position_name
+        		if [ -z "$position_name" ]; then
+            			position_name="$current_position_name"
+        		fi
+
+        		read -p "Begin Date [$current_begin_date] (YYYY-MM-DD): " begin_date
+        		if [ -z "$begin_date" ]; then
+            			begin_date="$current_begin_date"
+        		fi
+
+        		read -p "End Date [$current_end_date] (YYYY-MM-DD): " end_date
+        		if [ -z "$end_date" ]; then
+            			end_date="$current_end_date"
+        		fi
+
+        		read -p "Salary [$current_salary]: " salary
+        		if [ -z "$salary" ]; then
+            			salary="$current_salary"
+        		fi
+
+        		read -p "Hours Per Week [$current_ho_per_week]: " hours_per_week
+        		if [ -z "$hours_per_week" ]; then
+            			hours_per_week="$current_ho_per_week"
+        		fi
+		fi
+	fi
+
 	read -n 1 -s -r -p "Press any key to exit..."
 
 }
