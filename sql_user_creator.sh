@@ -97,9 +97,9 @@ while [[ $can_create == true ]];do
     	echo "2) Manager"
     	echo "3) Employee"
 	echo "Select other options:"
-    	echo "4) Describe"
-	echo "5) show all users"
-    	echo "6) Drop user"
+    	echo "4) Describe Roles"
+	echo "5) Show All Users"
+    	echo "6) Drop User"
 	echo "7) Exit"
 	echo
 	echo
