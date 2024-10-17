@@ -5,7 +5,7 @@ message=""
 
 display_reviews(){
         echo "Review list"
-        mysql  -D "$DB_NAME" -e "SELECT er.reviewer_id AS ID_rev, concat(rev.first_name, " ", rev.last_name) AS Reviewer_name, e.employee_id AS ID_emp, concat(e.first_name, " ", e.last_name) AS Employee_name, er.review_date AS Date_of_review, er.review AS Review, er.overall_score AS Score FROM emp_review er INNER JOIN employee rev ON er.reviewer_id = rev.employee_id INNER JOIN employee e ON er.employee_id = e.employee_id;" | column -t -s $'\t'
+        mysql  -D "$DB_NAME" -e "SELECT er.reviewer_id AS ID_rev, concat(rev.first_name, ' ', rev.last_name) AS Reviewer_name, e.employee_id AS ID_emp, concat(e.first_name, ' ', e.last_name) AS Employee_name, er.review_date AS Date_of_review, er.review AS Review, er.overall_score AS Score FROM emp_review er INNER JOIN employee rev ON er.reviewer_id = rev.employee_id INNER JOIN employee e ON er.employee_id = e.employee_id;" | column -t -s $'\t'
 
         echo ""
         read -n 1 -s -r -p "Press any key to continue..."
@@ -23,7 +23,6 @@ add_review(){
 
         mysql -D "$DB_NAME" -e "INSERT INTO emp_review (reviewer_id, employee_id, review_date, review, overall_score) VALUES ('$reviewer_id', '$employee_id', '$review_date', '$review', '$overall_score');"
 
-        fi
         read -n 1 -s -r -p "Press any key to exit..."
 }
 
