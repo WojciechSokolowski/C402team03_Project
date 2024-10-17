@@ -1,0 +1,26 @@
+
+1. Install libraries
+# sendmail for Linux
+sudo yum install sendmail -y 
+#smtp for gmail for Linux
+sudo yum install ssmtp -y
+
+2. Configure sstmp
+
+sudo nano /etc/ssmtp/ssmtp.conf
+
+#Enter the following configuration
+
+# The Gmail SMTP server
+mailhub=smtp.gmail.com:587
+
+# Use STARTTLS for secure transmission
+UseSTARTTLS=YES
+
+# Gmail account credentials
+AuthUser=your_email@gmail.com
+AuthPass=your_gmail_password_or_app_password
+
+# Email "From" address
+FromLineOverride=YES
+
