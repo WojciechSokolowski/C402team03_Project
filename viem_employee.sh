@@ -41,3 +41,5 @@ view_employee() {
 
 # Run the function
 view_employee
+read -n 1 -s -r -p "Press any key to exit..."
+
