@@ -30,7 +30,8 @@ edit_review(){
 
         read -p "Enter the reviewer ID <space> employee ID <space> review date <space> YYYY-MM-DD to edit: " reviewer_id employee_id review_date
 
-            review=$(mysql -D "$DB_NAME" -se "SELECT reviewer_id, employee_id, review_date, overall_score FROM emp_review er WHERE reviewer_id = '$reviewer_id' AND employee_id = '$employee_id' AND review_date = '$review_date';")
+        review=$(mysql -D "$DB_NAME" -se "SELECT reviewer_id, employee_id, review_date, overall_score FROM emp_review er WHERE reviewer_id = '$reviewer_id' AND employee_id = '$employee_id' AND review_date = '$review_date';")
+	cur_review_t=$(mysql -D "$DB_NAME" -se "SELECT review FROM emp_review er WHERE reviewer_id = '$reviewer_id' AND employee_id = '$employee_id' AND review_date = '$review_date';")
 
         if [ -z "$review" ]; then
                 message="No review found with reviewer ID $reviewer_id, employee ID $employee_id and review date $review_date"
@@ -55,9 +56,9 @@ edit_review(){
                 review_date="$cur_review_date"
         fi
 
-        read -rp "Review text [$cur_review_t]: " review_t
+        read -rp "Review text [${cur_review_t}]: " review_t
         if [ -z "$review_t" ]; then
-                review_t=$(mysql -D "$DB_NAME" -se "SELECT review FROM emp_review er WHERE reviewer_id = '$reviewer_id' AND employee_id = '$employee_id' AND review_date = '$review_date';")
+                review_t=$cur_review_t
         fi
 
         read -p "Overall score [$cur_overall_score]: " overall_score
