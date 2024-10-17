@@ -1,1 +1,1 @@
-![Alt text](amysql/EMPMAN ERD.png)
+![Alt text](amysql/EMPMAN_ERD.png)
