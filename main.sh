@@ -67,12 +67,15 @@ delete_user(){
 
 
 display(){
+    
+    clear
+
     echo "--------------------------------"
     echo "Employee Management System"
     echo "--------------------------------"
     echo "1) Edit Employees database"
     echo "2) View Employee details"
-    echo "3) "
+    echo "3) Create New Account"
     echo "4) "
     echo "5) "
     echo "6) "
@@ -102,6 +105,9 @@ while true; do
 			;;
 		2)
 			./view_employee.sh
+			;;
+		3)
+			./sql_user_creator.sh 
 			;;
 		9) break
 			;;
