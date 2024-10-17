@@ -49,6 +49,16 @@ CREATE TABLE position
 	ho_per_week SMALLINT NOT NULL
 );
 
+CREATE TABLE emp_review
+(
+	reviewer_id int UNSIGNED NOT NULL,
+	employee_id int UNSIGNED NOT NULL,
+	review_date date NOT NULL,
+	review MEDIUMTEXT NOT NULL,
+	overall_score decimal (10,1) NOT NULL,
+	CONSTRAINT score_intervallum CHECK (overall_score >= 0.0 AND overall_score <= 10.0)
+);
+
 ALTER TABLE employee
 	ADD FOREIGN KEY (location_id) REFERENCES location(location_id);
 
@@ -62,6 +72,10 @@ ALTER TABLE position
     ADD FOREIGN KEY (department_id) REFERENCES department(department_id);
    
 ALTER TABLE attendance
+	ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id);
+
+ALTER TABLE emp_review
+	ADD FOREIGN KEY (reviewer_id) REFERENCES employee(employee_id),
 	ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id);
 
 COMMIT;
