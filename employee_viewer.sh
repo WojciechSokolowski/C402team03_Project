@@ -26,24 +26,35 @@ add_employee(){
 	read -p "Would you like to enter the data in one line? (yes/no): " response
 	
 	if [[ "$response" == "yes" || "$response" == "y" || "$response" == "Y" ]]; then
-        	read -p "Enter employee details (first_name last_name date_of_birth email mobile location_id): " employee_data
-        	IFS=' ' read -r first_name last_name date_of_birth email mobile location_id <<< "$employee_data"
+        
+         	read -p "Enter employee details (first_name last_name date_of_birth email mobile location_id department_id position_name begin_date end_date salary hours_per_week): " employee_data
+       		IFS=' ' read -r first_name last_name date_of_birth email mobile location_id department_id position_name begin_date end_date salary hours_per_week <<< "$employee_data"
 
-        	employee_entry="First Name: $first_name, Last Name: $last_name, Date of Birth: $date_of_birth, Email: $email, Mobile: $mobile, Location ID: $location_id"
-        
-       		sorted_entry=$(echo "$employee_entry" | tr ', ' '\n' | sort | tr '\n' ', ' | sed 's/, $//')
-        
         	echo "You entered the following details:"
         	echo "First Name: $first_name"
         	echo "Last Name: $last_name"
-        	echo "Date of Birth: $date_of_birth"
-        	echo "Email: $email"
+	        echo "Date of Birth: $date_of_birth"
+	        echo "Email: $email"
 	        echo "Mobile: $mobile"
 	        echo "Location ID: $location_id"
+	        echo "Department ID: $department_id"
+	        echo "Position Name: $position_name"
+	        echo "Beginning Date: $begin_date"
+	        echo "Ending Date: $end_date"
+	        echo "Salary: $salary"
+	        echo "Hours per Week: $hours_per_week"
+
+
 		read -p "Is everything correct? (yes/no): " confirmation
         
         	if [[ "$confirmation" == "yes" || "$confirmation" == "y" || "$confirmation" == "Y" ]]; then
              		mysql -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
+  			employee_id=$(mysql -D "$DB_NAME" -se "SELECT MAX(employee_id) FROM employee;")
+				
+            		mysql -D "$DB_NAME" -e "
+            		INSERT INTO position (employee_id, department_id, name, begin_date, end_date, salary, ho_per_week)
+            		VALUES ($employee_id, $department_id, '$position_name', '$begin_date', '$end_date', $salary, $hours_per_week);
+            		"
             		echo "Employee added successfully."
         	else
             		echo "Employee addition cancelled."
@@ -58,8 +69,24 @@ add_employee(){
     		read -p "Enter email: " email
    		read -p "Enter mobile number: " mobile
     		read -p "Enter location ID: " location_id
+
+		read -p "Enter department ID: " department_id
+		read -p "Enter position name (max 50 characters): " name
+		read -p "Enter begining date (YYYY-MM-DD): " begin_date
+		read -p "Enter ending date (YYYY-MM-DD): " end_date
+		read -p "Enter salary: " salary
+		read -p "Enter hours per week: " ho_per_week
 		mysql -D "$DB_NAME" -e "INSERT INTO employee (first_name, last_name, date_of_birth, email, mobile, location_id) VALUES ('$first_name', '$last_name', '$date_of_birth', '$email', '$mobile', '$location_id');"
-	
+
+		employee_id=$(mysql -D "$DB_NAME" -se "SELECT MAX(employee_id) FROM employee;")
+		
+		mysql -D "$DB_NAME" -e "INSERT INTO position (employee_id, department_id, name, begin_date, end_date, salary, ho_per_week)
+        VALUES ($employee_id, $department_id, '$name', '$begin_date', '$end_date', $salary, $ho_per_week);
+        "
+
+        echo "Employee and position added successfully."
+
+
 	fi	
 	read -n 1 -s -r -p "Press any key to exit..."
 }
