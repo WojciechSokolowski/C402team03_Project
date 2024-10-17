@@ -89,5 +89,16 @@ WITH rows_to_insert AS (
 SELECT e_id, d, ci, co, pl FROM rows_to_insert rti
 WHERE	NOT EXISTS (SELECT * FROM attendance a WHERE rti.e_id = a.employee_id AND rti.d = a.checkin_date AND rti.ci = a.checkin_time
 												AND rti.co = a.checkout_time AND rti.pl = a.place);
+
+INSERT INTO emp_review (reviewer_id, employee_id, review_date, review, overall_score)
+WITH rows_to_insert AS (
+		SELECT	4 AS ri, 1 AS ei, '2024-10-14' AS rd, 'Consistently delivers high-quality work and is a great team player. He is always willing to help others and takes on new challenges with enthusiasm.' AS r, 9.2 AS score
+		UNION SELECT 3, 2, '2024-10-14', 'Has a strong attention to detail and is highly organized. She is proactive in addressing issues and communicates clearly with her team.', 9.0
+		UNION SELECT 5, 3, '2024-10-14', 'A reliable employee who consistently meets deadlines. He is efficient in his tasks but could work on improving collaboration within the team.', 7.0
+		UNION SELECT 2, 4, '2024-10-14', 'Hardworking and dedicated employee. Her leadership skills have greatly contributed to the success of recent projects.', 9.5
+		UNION SELECT 1, 5, '2024-10-14', 'Creative thinker who brings innovative ideas to the table. His problem-solving skills are top-notch, but he could improve on time management.', 7.8
+						)
+SELECT 	ri, ei, rd, r, score FROM rows_to_insert rti
+WHERE 	NOT EXISTS (SELECT * FROM emp_review er WHERE rti.ri =er.reviewer_id AND rti.ei = er.employee_id AND rti.rd = er.review_date);
 											
 COMMIT;
