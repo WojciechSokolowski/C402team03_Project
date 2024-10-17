@@ -60,22 +60,22 @@ CREATE TABLE emp_review
 );
 
 ALTER TABLE employee
-	ADD FOREIGN KEY (location_id) REFERENCES location(location_id);
+	ADD FOREIGN KEY (location_id) REFERENCES location(location_id) ON DELETE CASCADE;
 
 ALTER TABLE department
-	ADD FOREIGN KEY (location_id) REFERENCES location(location_id);
+	ADD FOREIGN KEY (location_id) REFERENCES location(location_id) ON DELETE CASCADE;
 
 ALTER TABLE position
-    ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id);
+    ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE;
    
 ALTER TABLE position
-    ADD FOREIGN KEY (department_id) REFERENCES department(department_id);
+    ADD FOREIGN KEY (department_id) REFERENCES department(department_id) ON DELETE CASCADE;
    
 ALTER TABLE attendance
-	ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id);
+	ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE;
 
 ALTER TABLE emp_review
-	ADD FOREIGN KEY (reviewer_id) REFERENCES employee(employee_id),
-	ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id);
+	ADD FOREIGN KEY (reviewer_id) REFERENCES employee(employee_id) ON DELETE CASCADE,
+	ADD FOREIGN KEY (employee_id) REFERENCES employee(employee_id) ON DELETE CASCADE;
 
 COMMIT;
