@@ -1,16 +1,11 @@
 #!/bin/bash
 
-# Database connection details
-DB_USER="team03"
-DB_PASS="test"
-DB_HOST="16.171.17.6"
-DB_NAME="employee_management_system"
 
 # Set current date and time
 today=$(date +"%Y-%m-%d")
 
 # Check for employees who have not registered attendance by 15:00 on the previous workday
-employees=$(mysql -h $DB_HOST -u $DB_USER -p$DB_PASS -D $DB_NAME -se "
+employees=$(mysql -D $DB_NAME -se "
 SELECT e.email, e.first_name, e.last_name 
 FROM employee e 
 LEFT JOIN attendance a 
@@ -31,7 +26,7 @@ echo "$employees" | while read -r employee; do
 	echo -e "Subject: $subject\n\n$body" | ssmtp "$email"
         echo "Sent email to $first_name $last_name at $email."
 done
-`
+
 
 #crontab -e
 #00 15 * * * /home/ec2-user/team3project

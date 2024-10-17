@@ -79,7 +79,7 @@ display(){
     echo "4) Check Attendance"
     echo "5) Payslip Generator"
     echo "6) Review System"
-
+    echo "7) Send Reminder Emails"
     echo "9) Exit"
     echo "--------------------------------"
 }
@@ -119,6 +119,10 @@ while true; do
 			;;
 		6)
 			./review_employee.sh 
+			;;
+		7)
+			./emailsender.sh 
+			read -n 1 -s -r -p "Press any key to continue..."
 			;;
 		9) break
 			;;
