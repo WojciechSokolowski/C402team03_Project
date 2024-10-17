@@ -73,10 +73,10 @@ display(){
     echo "--------------------------------"
     echo "Employee Management System"
     echo "--------------------------------"
-    echo "1) Edit Employees database"
-    echo "2) View Employee details"
+    echo "1) Edit Employees Database"
+    echo "2) View Employee Details"
     echo "3) Create New Account"
-    echo "4) "
+    echo "4) Check Attendance"
     echo "5) "
     echo "6) "
 
