@@ -11,7 +11,6 @@ FROM employee e
 LEFT JOIN attendance a 
 ON e.employee_id = a.employee_id AND a.checkin_date = '$today'  
 WHERE (a.checkin_time IS NULL OR a.checkin_time > '15:00');")
-echo "$employees"
 # Loop through employees and send alert emails
 echo "$employees" | while read -r employee; do
 	email=$(echo $employee | awk '{print $1}')
