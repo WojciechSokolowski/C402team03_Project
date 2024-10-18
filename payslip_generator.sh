@@ -77,14 +77,15 @@ generate_payroll() {
     echo "-------------------------------------------------------"
     echo "Payroll generated and payslip saved to $payslip_file."
 
-    # Uncomment this part Wojciech the line below is to enable emailing the payslip as we discussed.....but not sure if there will be enough time
-    # echo "Would you like to email the payslip to the employee? (y/n)"
-    # read send_email_choice
-    # if [ "$send_email_choice" = "y" ]; then
-    #     # Ensure 'mail' is configured on the system
-    #     cat "$payslip_file" | mail -s "Payslip for $emp_name" "$emp_email"
-    #     echo "Payslip sent to $emp_email."
-    # fi
+    echo "Would you like to email the payslip to the employee? (y/n)"
+    read send_email_choice
+    if [ "$send_email_choice" = "y" ]; then
+         # Ensure 'mail' is configured on the system
+	 subject="Payslip for $emp_name"
+	 body=$(cat "$payslip_file")
+         echo -e "Subject: $subject\n\n$body" | ssmtp "$emp_email"
+	 echo "Payslip sent to $emp_email."
+    fi
 }
 
 # Run the function
